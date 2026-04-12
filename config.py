@@ -1,0 +1,13 @@
+# AVA Server Configuration
+WS_HOST = "0.0.0.0"
+WS_PORT = 8765
+OLLAMA_MODEL = "llama3"
+OLLAMA_URL = "http://localhost:11434"
+WHISPER_MODEL = "base"
+STT_LANGUAGE = "en"
+TTS_VOICE = "en-IN-NeerjaNeural"
+SAMPLE_RATE = 16000
+HEARTBEAT_INTERVAL = 30
+HEARTBEAT_TIMEOUT = 10
+CALL_MAX_DURATION = 180
+DB_FILE = "leads.db"
