@@ -40,7 +40,7 @@ class LlmEngine:
         try:
             r = requests.post(f"{OLLAMA_URL}/api/generate", json={
                 "model": OLLAMA_MODEL, "stream": False,
-                "prompt": f"""Classify caller intent as ONE of: "interested", "not_interested", "talking"
+                "prompt": f"""Classify caller intent as ONE of: "interested", "not_interested", "talking", "ended"
 Caller said: "{user_text}"
 AI replied: "{ai_response}"
 Intent:""",
@@ -49,6 +49,7 @@ Intent:""",
             t = r.json()["response"].strip().lower()
             if "interest" in t and "not" not in t: return "interested"
             if "not" in t: return "not_interested"
+            if "end" in t: return "ended"
             return "talking"
         except:
             return "talking"

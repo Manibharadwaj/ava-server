@@ -51,6 +51,13 @@ def get_next_lead():
     conn.close()
     return dict(lead) if lead else None
 
+def get_pending_leads():
+    """Get all pending leads (for dashboard/bulk operations)."""
+    conn = get_connection()
+    leads = conn.execute("SELECT * FROM leads WHERE status = 'pending' ORDER BY id").fetchall()
+    conn.close()
+    return [dict(l) for l in leads]
+
 def update_lead_status(phone, status, notes=""):
     conn = get_connection()
     conn.execute("""UPDATE leads SET status = ?, call_count = call_count + 1,
