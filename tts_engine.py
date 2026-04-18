@@ -4,6 +4,7 @@ Server-side TTS for generating audio when phone TTS doesn't reach the call uplin
 import asyncio
 import os
 import subprocess
+from typing import Optional
 from config import TTS_VOICE, SAMPLE_RATE
 
 
@@ -15,7 +16,7 @@ class TtsEngine:
         communicate = edge_tts.Communicate(text, TTS_VOICE)
         await communicate.save(output_mp3)
 
-    def synthesize_to_file(self, text: str, output_wav: str) -> str | None:
+    def synthesize_to_file(self, text: str, output_wav: str) -> Optional[str]:
         """Convert text to WAV file (16kHz, mono)."""
         mp3_file = output_wav.replace(".wav", ".mp3")
         try:
@@ -36,7 +37,7 @@ class TtsEngine:
             print(f"[TTS] FFmpeg error: {e}")
             return None
 
-    def synthesize_to_pcm(self, text: str) -> bytes | None:
+    def synthesize_to_pcm(self, text: str) -> Optional[bytes]:
         """Convert text to raw PCM bytes (16-bit LE, mono, 16kHz).
         Useful for sending audio directly to phone via WebSocket.
         """

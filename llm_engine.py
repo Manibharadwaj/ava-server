@@ -1,6 +1,6 @@
 """AVA LLM Engine - Ollama"""
 import requests
-from config import OLLAMA_MODEL, OLLAMA_URL, CALL_MAX_DURATION
+from config import OLLAMA_MODEL, OLLAMA_URL
 
 def _load_system_prompt() -> str:
     try:
@@ -12,12 +12,17 @@ def _load_system_prompt() -> str:
 SYSTEM_PROMPT = _load_system_prompt()
 
 class LlmEngine:
-    def generate_reply(self, user_message: str, history: list = None) -> tuple[str, str]:
+    def generate_reply(self, user_message: str, history: list = None, lead_name: str = "") -> tuple[str, str]:
         if history is None:
             history = []
         if len(history) > 20:
             history = history[-20:]
-        messages = [{"role": "system", "content": SYSTEM_PROMPT}] + history + [{"role": "user", "content": user_message}]
+
+        system_content = SYSTEM_PROMPT
+        if lead_name:
+            system_content += f"\nYou are currently calling {lead_name}. Address them by name if natural."
+
+        messages = [{"role": "system", "content": system_content}] + history + [{"role": "user", "content": user_message}]
         ai_reply = self._chat(messages)
         intent = self._detect_intent(ai_reply, user_message)
         return ai_reply, intent
